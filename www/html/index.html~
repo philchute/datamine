@@ -1,0 +1,103 @@
+<!-- 
+@author: 	Christophe Limpalair <chris@scaleyourcode.com>
+@URI: 		http://scaleyourcode.com
+@date: 		2015
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<script src="http://d3js.org/d3.v3.min.js"  charset="utf-8"></script>
+	<script src="d3pie.min.js"></script>
+	<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+</head>
+
+<style type="text/css">
+	html {
+	  background:black;
+	}
+	.kmeans {
+	  display: inline;
+	  color:white;
+	}
+</style>
+
+<div id="pieChart"></div>
+
+<script>
+$(function() {
+    // Send POST request to job server with k value selected
+    $.ajax({
+      // method: "POST",
+      // data: { command: "curl -d 'input = %" + kValueOption + "%' 'localhost:8090/jobs?appName=%" + context + "%&classPath=%com.test." + context + "%&context=%" + context + "%&sync=true'" },
+      url: "https://s3.amazonaws.com/d3presentation/data.json", // change this URL to point to your Spark Job Server
+      dataType: "json",
+      success: function (json) {
+      	// initialize empty array
+      	var cluster = [];
+
+      	// push values to array
+      	for (var i = 0; i < json.length; i++) {
+      		cluster.push({
+            	cluster: json[i].cluster,
+            	label: json[i].label,
+            	value: json[i].count,
+            	color: json[i].color
+          	});
+      	}
+
+      	// generate new pie chart
+        var pie = new d3pie("pieChart", {
+          "header": {
+            "title": {
+              "text": "Cluster",
+              "color": "#e1e1e1",
+              "fontSize": 22,
+              "font": "verdana"
+            },
+          },
+          "size": {
+            "canvasHeight": 400,
+            "canvasWidth": 590
+          },
+          "data": {
+            "content": cluster
+          },
+          "labels": {
+            "outer": {
+              "pieDistance": 32
+            },
+            "mainLabel": {
+              "font": "verdana",
+              "color": "#e1e1e1"
+            },
+            "percentage": {
+              "color": "#e1e1e1",
+              "font": "verdana",
+              "decimalPlaces": 0
+            },
+            "value": {
+              "color": "#e1e1e1",
+              "font": "verdana"
+            },
+            "lines": {
+              "enabled": true,
+              "color": "#cccccc"
+            }
+          },
+          "effects": {
+            "pullOutSegmentOnClick": {
+              "effect": "linear",
+              "speed": 400,
+              "size": 8
+            }
+          }
+        });
+      }
+    });
+
+}); // end script
+
+</script>
+
+</body>
+</html>

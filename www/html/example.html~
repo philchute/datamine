@@ -1,0 +1,133 @@
+<html>
+<head>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js"></script>
+<script src="d3pie.min.js"></script>
+	<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+</head>
+
+<style type="text/css">
+	html {
+	  background:black;
+	}
+</style>
+
+<body>
+
+<div id="pieChart"></div>
+
+<script>
+$(function() {
+    // Send POST request to job server with k value selected
+    $.ajax({
+      // method: "POST",
+      // data: { command: "curl -d 'input = %" + kValueOption + "%' 'localhost:8090/jobs?appName=%" + context + "%&classPath=%com.test." + context + "%&context=%" + context + "%&sync=true'" },
+      url: "data.json", // change this URL to point to your Spark Job Server
+      dataType: "json",
+      success: function (json) {
+      	// initialize empty array
+      	var cluster = [];
+
+      	// push values to array
+      	for (var i = 0; i < json.length; i++) {
+      		cluster.push({
+            	cluster: json[i].cluster,
+            	label: json[i].label,
+            	value: json[i].count,
+            	color: json[i].color
+          	});
+      	}
+
+	var pie = new d3pie("pieChart", {
+		"header": {
+			"title": {
+				"text": "Clusters From K-Mean Intrusion Detection",
+				"color": "#eff4f8",
+				"fontSize": 30,
+				"font": "times new roman"
+			},
+			"subtitle": {
+				"text": "A pie chart showing the different clusters from the K-Mean intrusion dectection",
+				"color": "#b3b2b2",
+				"font": "times new roman"
+			},
+			"titleSubtitlePadding": 6
+		},
+		"footer": {
+			"color": "#999999",
+			"fontSize": 10,
+			"font": "open sans",
+			"location": "bottom-left"
+		},
+		"size": {
+			"canvasWidth": 595,
+			"pieInnerRadius": "50%",
+			"pieOuterRadius": "90%"
+		},
+		"data": {
+            		"content": cluster
+         	 },
+		"labels": {
+			"outer": {
+				"pieDistance": 80
+			},
+			"inner": {
+				"hideWhenLessThanPercentage": 3
+			},
+			"mainLabel": {
+				"color": "#b3b2b2",
+				"fontSize": 12
+			},
+			"percentage": {
+				"color": "#ffffff",
+				"fontSize": 8,
+				"decimalPlaces": 0
+			},
+			"value": {
+				"color": "#b3b2b2",
+				"fontSize": 12
+			},
+			"lines": {
+				"enabled": true
+			},
+			"truncation": {
+				"enabled": true
+			}
+		},
+		"tooltips": {
+			"enabled": true,
+			"type": "placeholder",
+			"string": "{label}: {value}, {percentage}%",
+			"styles": {
+				"fadeInSpeed": 675,
+				"backgroundColor": "#ccd4e6",
+				"backgroundOpacity": 0.75,
+				"color": "#010101",
+				"borderRadius": 8
+			}
+		},
+		"effects": {
+			"load": {
+				"speed": 2000
+			},
+			"pullOutSegmentOnClick": {
+				"effect": "elastic",
+				"speed": 500
+			}
+		},
+		"misc": {
+			"colors": {
+				"background": "#1a1818",
+				"segmentStroke": "#000000"
+			},
+			"gradient": {
+				"enabled": true,
+				"percentage": 70,
+				"color": "#1a1818"
+			}
+		}
+	});
+});
+</script>
+
+</body>
+</html>
