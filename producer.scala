@@ -1,5 +1,5 @@
-//import java.io.PrintWriter
-//import java.net.ServerSocket
+import java.io.PrintWriter
+import java.net.ServerSocket
 //import java.text.{SimpleDateFormat, DateFormat}
 //import java.util.Date
 import scala.util.Random
@@ -12,12 +12,12 @@ object producer{
                 val random = new Random()
                 //Maximum number of events per second
                 val MaxEvents = 100
-                //read a list of possible names
-                val namesResource = this.getClass.getResourceAsStream("/kddcup.data_10_percent")
-                val linesOfValues = scala.io.Source.fromInputStream(namesResource).getLines().toList.head.split("\n").toSeq
+                //create object of data
+                val lines = sc.textFile("/kddcup.data_10_percent")
+                //val linesOfValues = scala.io.Source.fromInputStream(namesResource).getLines().toList.head.split("\n").toSeq
 
                 def generateNetworkEvents(n:Int) = {
-                   val line = 
+                   val line = lines.takeSample(true, 1, random.nextLong)
                    val duration = line.next()
                    val protocol_type = line.next()
                    val service = line.next()
@@ -74,7 +74,7 @@ object producer{
                                                 val num = random.nextInt(MaxEvents)
                                                 val networkEvents = generateNetworkEvents(num)
                                                 networkEvents.foreach { event =>
-                                                        //productIterator covert tuplle into iterator
+                                                        //productIterator convert tuple into iterator
                                                         out.write(event.productIterator.mkString(","))
                                                         out.write("\n")
                                                 }
