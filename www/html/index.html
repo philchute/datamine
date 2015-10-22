@@ -29,154 +29,195 @@
 <div id="pieChart"></div>
 
 <script>
+	//D3 Pie object
+	var pie;
+
+	//D3 Data array of objects
+	var data = [];
+
+	//Time to refresh data
+	var time = 30000;
+
+	/**
+	 * Setup and load data into our D3pie
+	 **/
 	$(function() {
-		$.ajax({
-		      url: "data.json",
-		      dataType: "json",
-		      success: function (json) {
-			var cluster = [];
+		if (loadData()) {
+			console.log("Loaded in data"); 
+			loadD3();
 			
-			//Random test sample
-			for (var i = 0; i < 130; i++) {
-				//Generate a random light palette color for each data value
-				var color = '#' + 
-					Math.floor((Math.random()*155) + 100).toString(16) + //red
-					Math.floor((Math.random()*155) + 100).toString(16) + //green
-					Math.floor((Math.random()*155) + 100).toString(16); //blue
-
-				cluster.push({
-				    	cluster: "cluster",
-				    	label: "Custer" + i,
-				    	value: (Math.random()*10000000) / (Math.random()*50),
-				    	color: color
-			  	});
-			}
-
-			//Load in data through JSON
-			/*for (var i = 0; i < json.length; i++) {
-				//Generate a random light palette color for each data value
-				var color = '#' + 
-					Math.floor((Math.random()*155) + 100).toString(16) + //red
-					Math.floor((Math.random()*155) + 100).toString(16) + //green
-					Math.floor((Math.random()*155) + 100).toString(16); //blue
-				console.log(color + " " + json[i].label);
-
-				cluster.push({
-				    	cluster: json[i].cluster,
-				    	label: json[i].label,
-				    	value: json[i].count,
-				    	color: color
-			  	});
-			}*/
-
-			var pie = new d3pie("pieChart", {
-			  	"header": {
-					"title": {
-						"text": "Clusters From K-Mean Intrusion Detection",
-						"color": "#eff4f8",
-						"fontSize": 30,
-						"font": "times new roman"
-					},
-					"subtitle": {
-						"text": "A pie chart showing the different clusters from the K-Mean intrusion dectection",
-						"color": "#b3b2b2",
-						"font": "times new roman"
-					},
-					"titleSubtitlePadding": 6
-				},
-				"footer": {
-					"color": "#999999",
-					"fontSize": 10,
-					"font": "open sans",
-					"location": "bottom-left"
-				},
-				"size": {
-					"canvasWidth": window.innerWidth,
-					"canvasHeight": window.innerHeight,
-					"pieInnerRadius": "25%",
-					"pieOuterRadius": "90%"
-				},
-				"data": {
-			    		"content": cluster,
-					"sortOrder": "value-asc",
-					"smallSegmentGrouping": {
-						"label": "Other clusters less than 1%",
-						"enabled": true,
-						"value": 1
-					}
-			 	 },
-				"labels": {
-					"outer": {
-						"pieDistance": 80
-					},
-					"inner": {
-						"hideWhenLessThanPercentage": 2
-					},
-					"mainLabel": {
-						"color": "#b3b2b2",
-						"fontSize": 12
-					},
-					"percentage": {
-						"color": "#000000",
-						"fontSize": 10,
-						"decimalPlaces": 0
-					},
-					"value": {
-						"color": "#b3b2b2",
-						"fontSize": 12
-					},
-					"lines": {
-						"enabled": true
-					},
-					"truncation": {
-						"enabled": true
-					}
-				},
-				"tooltips": {
-					"enabled": true,
-					"type": "placeholder",
-					"string": "{label}: {value}, {percentage}%",
-					"styles": {
-						"fadeInSpeed": 675,
-						"backgroundColor": "#ccd4e6",
-						"backgroundOpacity": 0.75,
-						"color": "#010101",
-						"borderRadius": 8
-					}
-				},
-				"effects": {
-					"load": {
-						"speed": 750
-					},
-					"pullOutSegmentOnClick": {
-						"effect": "elastic",
-						"speed": 500
-					}
-				},
-				"misc": {
-					"colors": {
-						"background": "#100d0d",
-						"segmentStroke": "#000000"
-					},
-					"gradient": {
-						"enabled": true,
-						"percentage": 50,
-						"color": "#ffffff"
-					}
-				}
-			});
-
-			//Redraw the pie chart and scale it if the window is resized
-			$(window).resize(function() {
+			//Reload data every 30 seconds
+			setInterval(function() {
 				pie.updateProp("effects.load.speed", 0);
-				
-				//These will cause a bug... hm
+				loadData();
+			}, time);
+	
+			//Resizes the D3 canvas when the user changes the window size
+			//Causes an unknown bug
+			$(window).resize(function() {				
 				pie.updateProp("size.canvasWidth", window.innerWidth);
 				pie.updateProp("size.canvasHeight", window.innerHeight);
 			});
-		      }
-		});
+		} else {
+			console.log("Failed to load in data"); 
+		}
 	});
+
+	/**
+	 * Load in data through .JSON file and update or create clusters
+	 **/
+	function loadData() {
+		$.ajax({
+			url: "data.json",
+			dataType: "json",
+			success: function (json) {
+				if(json.error) return false;
+
+				//Set to .json length when we have data
+				for (var i = 0; i < 50; i++) {
+					var color = randomLightColor();
+
+					//Using random data till .json is up
+					//Check if cluster already exists, if so, update values, else create new cluster
+					if (data[i]) {
+						data[i].value += (Math.random()*(data[i].value*0.1) | 0);
+						//update label
+					} else
+						data.push({
+							value: (Math.random()*5000) / (Math.random()*5) | 0,
+							//There isn't any other built in way to display custom variables with d3pie tooltip..
+						    	label: "Custer #" + i + ", Escore: "+ 1 +", Dscore: "+ 1 +", Asample: "+ 1 +"",
+						    	color: color
+					  	});
+					/*data.push({
+				    		cluster: json[i].cluster,
+				    		label: json[i].label,
+				    		value: json[i].count,
+				    		color: color
+			  		});*/
+				}
+				
+				//Update pie objects data
+				if (pie != null)
+					pie.updateProp("data.content", data);
+			}
+		});
+		return true;
+	}
+
+	/**
+	 * Generate a random light palette color
+	 **/
+	function randomLightColor() {
+		//Generate a random light palette color for each data value
+		return '#' + 
+			Math.floor((Math.random()*155) + 100).toString(16) + //red
+			Math.floor((Math.random()*155) + 100).toString(16) + //green
+			Math.floor((Math.random()*155) + 100).toString(16); //blue
+	}
+
+	/**
+	 * Sets up the D3pie
+	 **/
+	function loadD3() {
+		pie = new d3pie("pieChart", {
+		  	"header": {
+				"title": {
+					"text": "Clusters From K-Mean Network Intrusion Detection",
+					"color": "#eff4f8",
+					"fontSize": 30,
+					"font": "times new roman"
+				},
+				"subtitle": {
+					"text": "A pie chart showing the different clusters from the K-Mean network intrusion dectection",
+					"color": "#b3b2b2",
+					"font": "times new roman"
+				},
+				"titleSubtitlePadding": 6
+			},
+			"footer": {
+				"color": "#999999",
+				"fontSize": 10,
+				"font": "open sans",
+				"location": "bottom-left"
+			},
+			"size": {
+				"canvasWidth": window.innerWidth,
+				"canvasHeight": window.innerHeight,
+				"pieInnerRadius": "60%",
+				"pieOuterRadius": "90%"
+			},
+			"data": {
+		    		"content": data,
+				"sortOrder": "value-asc",
+				"smallSegmentGrouping": {
+					"label": "Other clusters less than 1%",
+					"enabled": true,
+					"value": 1
+				}
+		 	 },
+			"labels": {
+				"outer": {
+					"pieDistance": 80
+				},
+				"inner": {
+					"hideWhenLessThanPercentage": 2
+				},
+				"mainLabel": {
+					"color": "#b3b2b2",
+					"fontSize": 12
+				},
+				"percentage": {
+					"color": "#000000",
+					"fontSize": 10,
+					"decimalPlaces": 1
+				},
+				"value": {
+					"color": "#b3b2b2",
+					"fontSize": 12
+				},
+				"lines": {
+					"enabled": true
+				},
+				"truncation": {
+					"enabled": true,
+					"truncateLength": 10
+				}
+			},
+			"tooltips": {
+				"enabled": true,
+				"type": "placeholder",
+				"string": "{label}, Count: {value}, {percentage}%",
+				"styles": {
+					"fadeInSpeed": 300,
+					"backgroundColor": "#ccd4e6",
+					"backgroundOpacity": 0.75,
+					"color": "#010101",
+					"borderRadius": 8
+				}
+			},
+			"effects": {
+				"load": {
+					"speed": 750
+				},
+				"pullOutSegmentOnClick": {
+					"effect": "elastic",
+					"speed": 500
+				}
+			},
+			"misc": {
+				"colors": {
+					"background": "#100d0d",
+					"segmentStroke": "#000000"
+				},
+				"gradient": {
+					"enabled": true,
+					"percentage": 50,
+					"color": "#ffffff"
+				}
+			}
+		});
+	}
 </script>
 
 </body>
