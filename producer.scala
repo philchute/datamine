@@ -7,7 +7,8 @@ import org.apache.spark.SparkContext
 import org.apache.spark.SparkConf
 //import org.apache.spark.streaming.{Seconds, StreamingContext}
 
-object producer{
+object Producer {
+
         def main(args: Array[String]){
                 val conf = new SparkConf().setMaster("local").setAppName("producer")
                 val sc = new SparkContext(conf)

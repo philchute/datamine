@@ -1,0 +1,46 @@
+<div class="page-header">
+	<h1>Generator</h1>
+</div>
+
+<div class="hidden" id="generatorTabs">
+	<ul class="nav nav-pills nav-stacked">
+		<li><a class="selectPage" href="#generator-start">Start</a></li>
+		<li><a class="selectPage" href="#generator-title">Title</a></li>
+		<li><a class="selectPage" href="#generator-size">Size</a></li>
+		<li><a class="selectPage" href="#generator-data">Data</a></li>
+		<li><a class="selectPage" href="#generator-labels">Labels</a></li>
+		<li><a class="selectPage" href="#generator-tooltips">Tooltips</a></li>
+		<li><a class="selectPage" href="#generator-footer">Footer</a></li>
+		<li><a class="selectPage" href="#generator-effects">Effects</a></li>
+		<li><a class="selectPage" href="#generator-events">Events</a></li>
+		<li><a class="selectPage" href="#generator-misc">Misc</a></li>
+		<li><a class="selectPage generateNavItem" href="#generator-result">Generate</a></li>
+	</ul>
+</div>
+
+<div class="row hidden" id="mainContent">
+	<div id="sidebar" {{#if hideMainContent}}class="hidden"{{/if}}>
+		<div class="tab-content">
+			<div class="hidden subPage" id="generator-start"></div>
+			<div class="hidden subPage" id="generator-title"></div>
+			<div class="hidden subPage" id="generator-size"></div>
+			<div class="hidden subPage" id="generator-data"></div>
+			<div class="hidden subPage" id="generator-labels"></div>
+			<div class="hidden subPage" id="generator-tooltips"></div>
+			<div class="hidden subPage" id="generator-footer"></div>
+			<div class="hidden subPage" id="generator-effects"></div>
+			<div class="hidden subPage" id="generator-events"></div>
+			<div class="hidden subPage" id="generator-misc"></div>
+		</div>
+	</div>
+	<div  id="pieChartDiv" class="col-md-7 {{#if hideMainContent}}hidden{{/if}}">
+		<div id="generatorPieChart" class="showOutline"></div>
+		<div id="generatorPieChartPad"></div>
+		<div id="birdyBackground"></div>
+	</div>
+	<div class="col-md-12 {{#unless hideMainContent}}hidden{{/unless}}" id="generator-result"></div>
+</div>
+
+<div id="smallScreenNotice">
+	The d3pie generator requires a <code>1200px</code> minimum screen width. Sorry!
+</div>

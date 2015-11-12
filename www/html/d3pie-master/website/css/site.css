@@ -1,0 +1,548 @@
+body .navbar {
+	position: fixed;
+	right: 0;
+	left: 0;
+	top: 0;
+	z-index: 1000;
+}
+body input {
+	font-size: 13px;
+}
+#sidebar {
+	width: 400px;
+	float: left;
+}
+
+/* for the UI */
+#generatorTabs {
+    margin: 0px 0px 15px;
+    padding: 0px;
+	width: 105px;
+	float: left;
+	border-right: 1px solid #dddddd;
+}
+#generatorTabs .active {
+	width: 105px;
+}
+.container {
+	margin-top: 40px;
+}
+body .navbar-nav>li>a {
+	padding-top: 13px;
+	padding-bottom: 13px;
+}
+
+#mainContent {
+    min-height: 400px;
+	margin-left: 130px;
+}
+#themesDropdown a, #exampleDropdown a {
+    color: #444444;
+}
+#generateBtnItem {
+	float: right;
+}
+
+#footerRow button {
+    float: right;
+}
+#data-table input {
+    width: 100%;
+    padding: 2px;
+}
+#data-table td {
+    padding: 3px;
+}
+#data-table thead th {
+    font-weight: normal;
+    color: #777777;
+}
+.removeRow {
+    width: 24px;
+    height: 24px;
+    background-image: url(../../website/images/remove-icon.png);
+    background-size: 100%;
+    display: inline-block;
+    opacity: 0.5;
+    cursor: pointer;
+    margin-bottom: -7px;
+}
+.removeRow:hover {
+    opacity: 0.8;
+}
+.colorGroup {
+    width: 120px;
+}
+.padRight {
+	padding-right: 20px;
+}
+#labelFormatExample {
+	width: 100px;
+	display: inline;
+}
+#labelFormat {
+	width: 70px;
+	display: inline-block;
+}
+input.tinyField {
+	width: 45px;
+}
+input.smallField {
+	width: 60px;
+}
+input.ib, .ib {
+	display: inline-block;
+}
+.bl {
+	display: block;
+}
+.hasError {
+	background-color: #990000;
+	color: white;
+}
+#segmentColors {
+    margin: 0px;
+    padding: 0px;
+}
+#segmentColors li {
+    float: left;
+    display: inline-block;
+    width: 76px;
+    height: 40px;
+    padding: 4px;
+}
+#segmentColors li div {
+	background-color: #dddddd;
+	border-radius: 6px;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+#segmentColors li span {
+	display: inline-block;
+	float: left;
+}
+#segmentColors li span.handle {
+	width: 26px;
+	height: 32px;
+}
+#segmentColors li span.color {
+	width: 42px;
+	height: 32px;
+	cursor: pointer;
+}
+
+/* overridden bootstrap CSS */
+body .navbar-brand {
+    width: 150px;
+}
+body .form-control {
+	font-size: 13px;
+}
+.scriptVersion {
+	color: #dddddd;
+	margin-left: 8px;
+	font-size: 15px;
+}
+body .nav-stacked > li + li {
+	margin-top: 0px;
+}
+
+
+.pixelSizeField {
+    width: 50px;
+}
+
+body .form-group .btn, body .input-group-addon, body .input-group-btn .btn {
+    padding: 8px;
+}
+body .colorGroup {
+    width: 100px;
+}
+
+a.docAnchor {
+	display: block;
+	position: relative;
+	top: -60px;
+	visibility: hidden;
+}
+
+#generatorPieChart {
+    display: inline-block;
+    position: absolute;
+    z-index: 2;
+	margin-left: 5px;
+	border: 1px solid #ffffff;
+}
+#generatorPieChart.showOutline {
+    border: 1px dashed #999999;
+}
+.note {
+    color: #999999;
+}
+.handle {
+    background: transparent url(../../website/images/drag.png) 50% 50% no-repeat;
+    cursor: pointer;
+}
+.clear {
+    clear: both;
+}
+
+#deleteColorZone li {
+    display: none;
+}
+#deleteColorZone #defaultDeleteColorZone {
+    display: block;
+}
+
+#sortableDataList {
+	list-style: none;
+	padding: 0px;
+    border: 1px solid #dddddd;
+    border-bottom: 0px;
+}
+#sortableDataList input {
+    padding: 2px;
+}
+#sortableDataList li {
+    border-bottom: 1px solid #dddddd;
+    padding: 3px;
+}
+#sortableDataList li:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+#sortableDataList .handle {
+    width: 15px;
+    height: 17px;
+    display: inline-block;
+    background: transparent url(../../website/images/drag_sm.png) 50% 50% no-repeat;
+    cursor: pointer;
+    margin: 3px 0px -3px;
+}
+#sortableDataList .segmentColor {
+	width: 25px;
+	height: 25px;
+	display: inline-block;
+	margin-bottom: -8px;
+	cursor: pointer;
+}
+#sortableDataListHeader {
+	list-style: none;
+	padding: 0px;
+    color: #777777;
+    font-size: 12px;
+    border-top: 1px solid #dddddd;
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    height: 30px;
+    margin-bottom: 0px;
+}
+#sortableDataListHeader li {
+    float: left;
+    padding: 6px;
+    border-right: 1px solid #dddddd;
+}
+#sortableDataListHeader li.col0 {
+    width: 34px;
+    height: 29px;
+}
+#sortableDataListHeader li.col1 {
+	width: 30px;
+	height: 29px;
+}
+#sortableDataListHeader li.col2 {
+    width: 172px;
+}
+#sortableDataListHeader li.col3 {
+    width: 133px;
+}
+#sortableDataListHeader li.col4 {
+    width: 40px;
+}
+.dataLabel {
+    width: 170px;
+}
+.dataValue {
+    width: 126px;
+}
+.dataOffsetX, .dataOffsetY {
+    width: 35px;
+}
+
+.callbackCode {
+	font-size: 12px;
+	color: green;
+}
+body .disabledText {
+	color: #cccccc;
+}
+
+.misc .col-lg-3 {
+	padding-right: 0px;
+}
+
+#birdyBackground canvas{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: 1;
+	margin-left: 18px;
+}
+
+#transparencyProof {
+	cursor: pointer;
+}
+body .pager {
+	margin: 16px 0px;
+}
+
+
+/* an ACTION. This hides an element with (hardware-accelerated) CSS */
+.fadeOut {
+	-webkit-transition: opacity .2s ease-in-out;
+	-moz-transition: opacity .2s ease-in-out;
+	-ms-transition: opacity .2s ease-in-out;
+	-o-transition: opacity .2s ease-in-out;
+	opacity: 0;
+}
+.hidden {
+	display: none;
+}
+
+body .fadeIn {
+	-webkit-transition: opacity .3s ease-in-out;
+	-moz-transition: opacity .3s ease-in-out;
+	-ms-transition: opacity .3s ease-in-out;
+	-o-transition: opacity .3s ease-in-out;
+	opacity: 1;
+}
+.topPage, .subPage {
+	opacity: 0;
+}
+
+.panelToggle {
+	border-bottom: 1px solid #cccccc;
+	padding-bottom: 6px;
+	margin-bottom: 16px;
+}
+.panelToggle span {
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-top: 10px solid #666666;
+	margin-top: 6px;
+	float: right;
+}
+.panelToggle.expanded span {
+	width: 0;
+	height: 0;
+	border-top: none;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-bottom: 10px solid #666666;
+}
+
+.panelToggle:hover {
+	cursor: pointer;
+	color: #008cba;
+}
+.panelToggle:hover span {
+	border-top: 10px solid #008cba;
+}
+.panelToggle.expanded:hover span {
+	border-top: none;
+	border-bottom: 10px solid #008cba;
+}
+.fullWidthRange {
+	width: 100%;
+}
+#pieIconPie, #pieIconDonut {
+	cursor: pointer;
+}
+.paddedRow {
+	margin-bottom: 6px;
+}
+label.disabled {
+	color: #cccccc;
+}
+#currentExamplePieName {
+	color: #007196;
+	padding: 10px;
+}
+.callbackCode {
+	white-space: pre-wrap;
+	padding: 2px 12px;
+}
+.dataRowIndex {
+	font-size: 7pt;
+	width: 10px;
+	display: inline-block;
+}
+.createSimilarPieLink {
+	text-decoration: none;
+	float: right;
+	margin-top: 0px;
+}
+a[target=_blank] {
+	background: url(../../website/images/open_new_window_icon.png) no-repeat right center;
+	background-size: 12px 12px;
+	padding-right: 16px;
+}
+
+body .nav-pills>li>a.generateNavItem,
+body .nav-pills>li>a.generateNavItem>:hover,
+body .nav-pills>li>a.generateNavItem:focus {
+	color: #000000;
+}
+body .nav-pills>li.active>a.generateNavItem {
+	background-color: #5bc0de;
+	color: white;
+}
+#docs section {
+	margin-bottom: 30px;
+}
+body pre {
+	font-size: 12px;
+	line-height: 18px;
+}
+.red {
+	color: #ff0000;
+}
+#finalResult {
+	width: 100%;
+	height: 400px;
+	border: 1px solid #999999;
+	overflow: scroll;
+}
+
+.aboutPageRow h3 {
+	margin-top: 0px;
+}
+.aboutPageList li {
+	font-size: 10pt;
+}
+
+.label-purple {
+	background-color: #9300ca;
+}
+.label-pink {
+	background-color: #bf4bc9;
+}
+.label-green {
+	background-color: #4bc94b;
+}
+
+#docs .page-header {
+	margin-bottom: 0px;
+}
+
+
+#generatorTabs, #mainContent {
+	display: none !important;
+}
+#smallScreenNotice {
+	display: block;
+}
+@media (min-width: 1200px) {
+	#generatorTabs, #mainContent {
+		display: block !important;
+	}
+	#smallScreenNotice {
+		display: none;
+	}
+}
+
+.slidesjs-control, .slidesjs-container {
+	height: 1100px !important;
+}
+
+.slidesjs-pagination {
+	display: none;
+}
+
+/* for small screens */
+#aboutTabDemoPie1 {
+	border: 1px dashed #cccccc;
+	text-align: center;
+}
+.aboutPageRow2, .aboutPageRow3 {
+	display: none;
+}
+.aboutPageRow1 .col3 p {
+	margin-top: 30px;
+}
+
+@media (min-width: 768px) {
+	#mainNav1 {
+		width: 102px;
+	}
+	#mainNav2 {
+		width: 90px;
+	}
+}
+
+@media (min-width: 992px) {
+	.aboutPageRow1 .col3 p {
+		margin-top: 0px;
+	}
+	.aboutPageRow2, .aboutPageRow3 {
+		display: block;
+	}
+	.slidesjs-pagination {
+		display: block;
+	}
+	#aboutTabDemoPie1 {
+		border: none;
+		text-align: left;
+	}
+	.slidesjs-control, .slidesjs-container {
+		height: 388px !important;
+	}
+	.aboutPageRow .col-lg-4 {
+		float: left;
+		width: 50%;
+	}
+	.aboutPageRow .col3 {
+		display: none;
+	}
+	.aboutPageRow .col-lg-5 {
+		float: left;
+		width: 34%;
+	}
+	.aboutPageRow .col-lg-7 {
+		float: left;
+		width: 66%;
+	}
+}
+@media (min-width: 1200px) {
+	.aboutPageRow .col-lg-4 {
+		width: 33.3333333%;
+	}
+	.aboutPageRow .col3 {
+		display: block;
+	}
+}
+a.btn-info[target=_blank] {
+	background-color: #5bc0de;
+	background-image: none;
+}
+
+#smallSegmentGroupingValueType {
+    width: 100px;
+    display: inline-block;
+}
+
+.hr {
+    border-bottom: 1px solid #dddddd;
+    margin: 15px 0px;
+}
+
+.hint {
+    font-size: 7pt;
+    color: #999999;
+}
+
+.pixelSizeField[disabled] {
+    background-color: #eeeeee;
+}

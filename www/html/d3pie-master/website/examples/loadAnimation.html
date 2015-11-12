@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>d3pie examples</title>
+</head>
+<body>
+<h1>
+	<a href="../../#examples">Standalone Examples</a> &raquo; No load animation
+</h1>
+
+<p>
+	d3pie shows a smooth load effect by default. This example shows up to turn it off (and apparently, how to set
+	really, really ugly colours for each pie segment).
+</p>
+
+<hr size="1" />
+
+<div id="pie"></div>
+
+<script src="../libs/d3.min.js"></script>
+<script src="../../d3pie/d3pie.js"></script>
+
+<script>
+	var pie = new d3pie("pie", {
+		header: {
+			title: {
+				text: "No load animation!"
+			}
+		},
+		effects: {
+			load: {
+				effect: "none"
+			}
+		},
+		data: {
+			content: [
+				{ label: "Chickens", value: 5, color: "#00ff00" },
+				{ label: "Elephants", value: 8, color: "#0000ff" },
+				{ label: "Java", value: 2, color: "#ff0000" }
+			]
+		}
+	});
+</script>
+
+<hr size="1" />
+
+<blockquote><pre>
+var pie = new d3pie("pie", {
+	header: {
+		title: {
+			text: "No load animation!"
+		}
+	},
+	effects: {
+		load: {
+			effect: "none"
+		}
+	},
+	data: {
+		content: [
+			{ label: "Chickens", value: 5, color: "#00ff00" },
+			{ label: "Elephants", value: 8, color: "#0000ff" },
+			{ label: "Java", value: 2, color: "#ff0000" }
+		]
+	}
+});
+</pre></blockquote>
+
+</body>
+</html>

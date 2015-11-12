@@ -1,0 +1,69 @@
+<h4>Footer text</h4>
+
+<div class="row form-group">
+	<div class="col-lg-12">
+    	<input type="text" class="form-control" id="footerText" value="{{config.footer.text}}" />
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+    	<label for="footerLocation" class="control-label">Footer Location</label>
+	</div>
+</div>
+<div class="row form-group">
+    <div class="col-lg-12">
+        <select id="footerLocation" class="form-control changeUpdateNoAnimation">
+            <option value="bottom-left" {{#compare config.footer.location "bottom-left"}}selected="selected"{{/compare}}>Bottom-left</option>
+            <option value="bottom-center" {{#compare config.footer.location "bottom-center"}}selected="selected"{{/compare}}>Bottom-center</option>
+            <option value="bottom-right" {{#compare config.footer.location "bottom-right"}}selected="selected"{{/compare}}>Bottom-right</option>
+        </select>
+    </div>
+</div>
+
+<div class="row col-md-12" style="padding-top: 10px">
+    <h4>Footer Styles</h4>
+</div>
+
+<div id="titleStyles" style="padding-right: 30px">
+    <div class="md-col-12"></div>
+
+    <div class="row">
+        <div class="col-md-4"><label>Color</label></div>
+        <div class="col-md-5"><label>Font</label></div>
+        <div class="col-md-3"><label>Font Size</label></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div id="footerColorGroup" class="colorGroup input-group form-group">
+                <input type="text" id="footerColor" value="{{config.footer.color}}" class="form-control" />
+                <span class="input-group-addon"><i></i></span>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <select id="footerFont" class="form-control changeUpdateNoAnimation">
+				<optgroup label="Standard Fonts">
+					<option value="arial" {{#compare config.footer.font "arial"}}selected="selected"{{/compare}}>Arial</option>
+					<option value="courier" {{#compare config.footer.font "courier"}}selected="selected"{{/compare}}>Courier</option>
+					<option value="garamond" {{#compare config.footer.font "garamond"}}selected="selected"{{/compare}}>Garamond</option>
+					<option value="georgia" {{#compare config.footer.font "georgia"}}selected="selected"{{/compare}}>Georgia</option>
+					<option value="helvetica" {{#compare config.footer.font "helvetica"}}selected="selected"{{/compare}}>Helvetica</option>
+					<option value="lucida sans" {{#compare config.footer.font "lucida sans"}}selected="selected"{{/compare}}>Lucida Sans</option>
+					<option value="times new roman" {{#compare config.footer.font "times new roman"}}selected="selected"{{/compare}}>Times New Roman</option>
+					<option value="verdana" {{#compare config.footer.font "verdana"}}selected="selected"{{/compare}}>Verdana</option>
+				</optgroup>
+				<optgroup label="Web Fonts">
+					<option value="cinzel" {{#compare config.footer.font "cinzel"}}selected="selected"{{/compare}}>Cinzel</option>
+					<option value="exo" {{#compare config.footer.font "exo"}}selected="selected"{{/compare}}>Exo</option>
+					<option value="open sans" {{#compare config.footer.font "open sans"}}selected="selected"{{/compare}}>Open Sans</option>
+				</optgroup>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <input id="footerFontSize" type="number" class="pixelSizeField keyupUpdateNoAnimation"
+				value="{{numbersOnly config.footer.fontSize}}" min="0" />
+            <label for="footerFontSize">px</label>
+        </div>
+    </div>
+</div>

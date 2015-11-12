@@ -1,0 +1,62 @@
+<div class="row col-lg-12">
+	<h4>Size</h4>
+</div>
+
+<div class="row form-group">
+	<div class="col-md-3">
+		<label for="canvasWidth" class="control-label bl">Canvas Width</label>
+		<input type="number" id="canvasWidth" value="{{config.size.canvasWidth}}"
+			class="form-control smallField ib keyupUpdateNoAnimation" min="1" />
+		<label class="ib">px</label>
+	</div>
+	<div class="col-md-3" style="padding-right: 0px;">
+		<label for="canvasHeight" class="control-label bl">Canvas Height</label>
+		<input type="number" id="canvasHeight" value="{{config.size.canvasHeight}}"
+			class="form-control smallField ib keyupUpdateNoAnimation" min="1" />
+		<label class="ib">px</label>
+	</div>
+	<div class="col-md-6">
+		<input type="checkbox" id="showCanvasOutline" style="margin-right: 8px; margin-bottom: 10px;"
+			{{#if showOutline}}checked="checked"{{/if}} />
+		<label for="showCanvasOutline">
+			Show canvas outline<br />
+			<span class="note">(for visual illustration only)</span>
+		</label>
+	</div>
+</div>
+
+<div class="row col-lg-12">
+	<label for="pieInnerRadius" class="control-label">Pie Inner Radius</label>
+</div>
+<div class="row">
+	<div class="col-lg-12">
+		<input type="range" class="fullWidthRange" id="pieInnerRadius" min="0" max="100" value="{{numbersOnly config.size.pieInnerRadius}}" />
+	</div>
+</div>
+<div class="row form-group">
+	<div class="col-lg-2">
+		<img src="website/images/pieIcon-pie.png" width="30" height="30" id="pieIconPie" />
+	</div>
+	<div class="col-lg-8" style="text-align: center">
+		<span class="label label-default" id="pieInnerRadiusDisplayValue">{{config.size.pieInnerRadius}}</span>
+	</div>
+	<div class="col-lg-2" style="text-align: right">
+		<img src="website/images/pieIcon-donut.png" width="30" height="30" id="pieIconDonut" />
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<label for="pieInnerRadius" class="control-label">Pie Outer Radius</label>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-12">
+		<input type="range" class="fullWidthRange" id="pieOuterRadius" min="1" max="100" value="{{numbersOnly config.size.pieOuterRadius}}" />
+	</div>
+</div>
+<div class="row form-group">
+	<div class="col-lg-12" style="text-align: center">
+		<span class="label label-default" id="pieOuterRadiusDisplayValue">{{config.size.pieOuterRadius}}</span>
+	</div>
+</div>

@@ -1,0 +1,46 @@
+<h4>Congratulations, you just built a pie chart! And it looks awesome! <span class="red">*</span></h4>
+
+<p>
+	Choose the content you want to generate from the options below. Note: if you copy and paste the full HTML for
+	use on your own site, you'll need to put a copy of the <code>d3pie.min.js</code> file in the same folder.
+</p>
+
+<div class="row">
+	<div class="col-lg-2 form-group">
+
+		<div class="row">
+			<div class="radio">
+				<label class="col-lg-12" for="outputFormat1">
+					<input type="radio" name="outputFormat" class="triggerGenerationUpdate" value="full" id="outputFormat1" checked="checked" />
+					Full HTML
+				</label>
+			</div>
+		</div>
+		<div class="row">
+			<div class="radio">
+				<label class="col-lg-12" for="outputFormat2">
+					<input type="radio" name="outputFormat" class="triggerGenerationUpdate" value="js" id="outputFormat2" />
+					Javascript only
+				</label>
+			</div>
+		</div>
+
+		<hr size="1" />
+
+		<input id="minimizeJS" type="checkbox" class="triggerGenerationUpdate" />
+			<label for="minimizeJS">Minimize JS</label>
+
+	</div>
+	<div class="col-lg-10">
+		<pre id="finalResult" class="language-html"></pre>
+	</div>
+</div>
+
+
+<br />
+<p>
+	<small>
+		<span class="red">*</span>
+		I’m just being nice, I have no proof of this. My coding skills aren’t that strong.
+	</small>
+</p>

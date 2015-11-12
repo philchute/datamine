@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>d3pie examples</title>
+</head>
+<body>
+<h1>
+	<a href="../../#examples">Standalone Examples</a> &raquo; Tooltips #3
+</h1>
+
+<p>
+	This shows you how to customize the tooltips style. The demo below contains all available styling fields.
+</p>
+
+<hr size="1" />
+
+<div id="pie"></div>
+
+<script src="../libs/d3.min.js"></script>
+<script src="../../d3pie/d3pie.js"></script>
+
+<script>
+	var pie = new d3pie("pie", {
+		data: {
+			content: [
+				{ label: "Elephants", value: 1 },
+				{ label: "Motmots", value: 2 },
+				{ label: "Pikas", value: 3 },
+        { label: "Jays", value: 2 },
+        { label: "Rhubarb", value: 5 },
+        { label: "Tennis", value: 2 },
+        { label: "Chickens", value: 1 }
+			]
+		},
+    tooltips: {
+      enabled: true,
+      type: "placeholder",
+      string: "{label}: {percentage}%",
+      styles: {
+        fadeInSpeed: 500,
+        backgroundColor: "#00cc99",
+        backgroundOpacity: 0.8,
+        color: "#ffffcc",
+        borderRadius: 4,
+        font: "verdana",
+        fontSize: 20,
+        padding: 20
+      }
+    }
+	});
+</script>
+
+<hr size="1" />
+
+<blockquote><pre>
+var pie = new d3pie("pie", {
+  data: {
+    content: [
+      { label: "Elephants", value: 1 },
+      { label: "Motmots", value: 2 },
+      { label: "Pikas", value: 3 },
+      { label: "Jays", value: 2 },
+      { label: "Rhubarb", value: 5 },
+      { label: "Tennis", value: 2 },
+      { label: "Chickens", value: 1 }
+    ]
+  },
+  tooltips: {
+    enabled: true,
+    type: "placeholder",
+    string: "{label}: {percentage}%",
+    styles: {
+      fadeInSpeed: 500,
+      backgroundColor: "#00cc99",
+      backgroundOpacity: 0.8,
+      color: "#ffffcc",
+      borderRadius: 4,
+      font: "verdana",
+      fontSize: 20,
+      padding: 20
+    }
+  }
+});
+</pre></blockquote>
+
+<br />
+
+</body>
+</html>
