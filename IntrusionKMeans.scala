@@ -57,155 +57,91 @@ object IntrusionKMeans{
    //********###CODE###***************************************************//
    System.out.println("Total number of Sample \n" + rawData.count)
 
-   //What labels are present in the data, and how many are there of each? The  
-   //following code counts by label into label-count tuples, sorts them descending by 
-   //count, and prints the result:
-   //res1 after countByValue().: scala.collection.Map[String,Long]
-   //res2 after toSeq: Seq[(String, Long)]
-   
-   //********###CODE###***************************************************//
-   //###########CODE #####
-   rawData.map(_.split(',').last).countByValue().toSeq.sortBy(_._2).
-           reverse.foreach(println)
+   // rawData.map(_.split(',').last).countByValue().toSeq.sortBy(_._2).
+   //         reverse.foreach(println)
         
    
-   //RDD[(String, org.apache.spark.mllib.linalg.Vector)]
-   //Each element of RDD is the label and data vector.
-   //RDD[(String, org.apache.spark.mllib.linalg.Vector)]
-   //this RDD removes the three categorical value columns starting from index 1
-   val labelsAndData = rawData.map { line =>
-      //toBuffer creates Buffer, a mutable list
-      // buffer: scala.collection.mutable.Buffer[String]
-      val buffer = line.split(',').toBuffer
-      //removes the three categorical value columns starting from index 1
-      buffer.remove(1, 3)
-      val label = buffer.remove(buffer.length - 1)
-      // vector: org.apache.spark.mllib.linalg.Vector
-      val vector = Vectors.dense(buffer.map(_.toDouble).toArray)
-      (label, vector)
-   }
-   labelsAndData.cache()
-   
-   //rdd.RDD[org.apache.spark.mllib.linalg.Vector]
-   //each element of labelsAndData is key/value pair
-   //K-means will operate on just the feature vectors.
-   //so we get the values of each element only
-   val data = labelsAndData.values.cache()
-   
-   //val Array(batchData, streamingData) = data.randomSplit(Array(0.6, 0.4))
-  val Array(batchData, streamingData) = data.randomSplit(Array(0.01, 0.99))
-   
-   //********###CODE###***************************************************//
-   //******* ###CODE###***************************************************//
-   //initial try the default option for Kmeans
-   //clusteringTake0(data, labelsAndData)
+  //batch process
+  //val Array(rawBatchData, testData) = rawData.randomSplit(Array(0.4, 0.6), seed = 11)
+  val Array(rawBatchData, testData) = rawData.randomSplit(Array(0.01, 0.99), seed = 11)
+  
+  val batchLabelsAndDataVector = rawBatchData.map { line =>
+	val buffer = line.split(',').toBuffer
+	buffer.remove(1, 3)
+	val label = buffer.remove(buffer.length - 1)
+	val vector = Vectors.dense(buffer.map(_.toDouble).toArray)
+	(label, vector)
+    }
     
-   //********************************************************************//
-   //Search for Best K  *************************************************//
-   //********************************************************************//
-   //Typically, many values of k are tried to find the best one. But what is best
-   //How many clusters are appropriate for this data set?
-   
-    //this function will search best K based on average distance to centroid
-   //********###CODE###***************************************************//
-   //******* ###CODE###***************************************************//
-   //System.out.println("Search best K without Normalized data")
-   //searchBestKWithoutNormalizationUsingDistance(data)
-   
-   //this function will search best K based on average distance to centroid
-   //DATA IS NORMALIZED
-   //********###CODE###***************************************************//
-   //********###CODE###***************************************************//
-   //System.out.println("\nSearch best K with Normalized data")
-   //searchBestKWithNormalizedDataUsingDistance(data)
-   
-   //DATA IS NORMALIZED and include categorial features
-   //********###CODE###***************************************************//
-    //********###CODE###***************************************************//
-    //System.out.println("\nSearch best K with Normalized and categorial data Distance score")
-    //searchBestKWithNormalizedCategoricalUsingDistance(rawData)
+ // batchLabelsAndDataVector.cache()
 
-    //*******************************************************************//
-    //WEIGHTED AVERAGE OF ENTROPY AS CLUSTER SCORE
-    //********************************************************************
-   //A good clustering would have clusters whose collections of labels are homogeneous 
-   //and so have low entropy. A weighted average of entropy can therefore be used as a
-   //cluster score:
-   //********###CODE###***************************************************//
-   //System.out.println("\nSearch best K with Normalized and categorial data Entropy")
-   //searchBestKWithUsingEntropy(rawData)
-   
-   //Normalize the data
-   val normalizedBatchData = batchData.map(buildNormalizationFunction(batchData))
-   val normalizedBatchLabelsAndData = labelsAndData.
-     mapValues(buildNormalizationFunction(labelsAndData.values))
-     
-   //Create the K-means model based on the batch data and the normalized function
-   val kMeansModel = buildBatchKMeansModel(batchData, buildNormalizationFunction(batchData))
+  //Get the values from the vector
+  val batchDataVector = batchLabelsAndDataVector.values//batchLabelsAndDataVector.values.cache()
+
+  //Create the normalize function on the vector
+  val normalizeFunction = buildNormalizationFunction(batchDataVector)
+
+  //Build th batch K means model
+  val batchKMModel = buildBatchKMeansModel(batchDataVector, normalizeFunction)
    
    //Evaluate the clustering results using the distance score for Batch
    //Pass in normalized data
-   println("Distance Score: " + calculateDistanceScore(normalizedBatchData, kMeansModel))
+   println("Distance Score: " + calculateDistanceScore(batchDataVector, batchKMModel))
    
    //Evaluate the clustering results using entropy for Batch
-   println("Entropy Score: " + EntropyScore(normalizedBatchLabelsAndData, kMeansModel))
+   println("Entropy Score: " + EntropyScore(batchLabelsAndDataVector, batchKMModel))
    
    //Figure out what went into the clusters for Batch
-   clusteringLabelMakeup(kMeansModel, labelsAndData)
+   clusteringLabelMakeup(batchKMModel, batchLabelsAndDataVector)
    
-   //this will print out top 10 anomlous data
-   //Build the anomalous detector
-   System.out.println("\nSearch anomalous data: ")
-   //anomalies(rawData)
-
+   //Build the anomaly Detector
+   val anomalyDetector = buildAnomalyDetector(batchKMModel, batchDataVector, normalizeFunction)
    
    //Start of the streaming k-means
-   
+ 
    //Set up the streaming context and the stream
    val ssc = new StreamingContext(sc, Seconds(10))
    val stream = ssc.socketTextStream("localhost", 9999)
-   
-   val numDimensions = 100
-   val weights = new Array[Double](numDimensions)
-   //Create streaming K-means model based on batch data
-   val model = new StreamingKMeans().setK(130).setDecayFactor(1.0).setInitialCenters(kMeansModel.clusterCenters, weights)
-
-    //Create a stream of labeled points
-    val labelStream = stream.map{event => 
-      val split = event.split("\t")
-      val y = split(0).toDouble
-      val features = split(1).split(",").map(_.toDouble)
-      LabeledPoint(label = y, features = Vectors.dense(features))
-    }
-    
-    val trainingData = stream.map{event =>
-      val split = event.split(",").map(_.toDouble)
-      val vector = Vectors.dense(split)
-      vector
-      }
   
-   println("Waiting on producer")
+   // create a stream of labeled points
+   val labeledDataStream = stream.map { line =>
+   val buffer = line.split(',').toBuffer
+   buffer.remove(1, 3)
+   val label = buffer.remove(buffer.length - 1)
+   val vector = Vectors.dense(buffer.map(_.toDouble).toArray)
+   (label, vector)
+   }
    
-   model.trainOn(trainingData)
-   val predictedValues = model.predictOnValues(labelStream.map(lp => (lp.label, lp.features))).print()
+   val dataStream = labeledDataStream.map { case (label, vector ) => vector }
+    
+   val k = 130 //number of cluster
+   val weight = 100.0 // each cluster has equal weight
+   val weightVector = Array.fill(k)(weight)
 
-   //For each batch interval, evaluate the quality of that batch using 
-   //the distance score and entropy score
-   
-   //println("Distance Score: " + calculateDistanceScore())
-   
-   //println("Entropy Score: " + EntropyScore())
-   
-   //Detect the anomalous samples
-   //anomalies()
-   
-   //Display the clustering quality
-   //clusteringLabelMakeup()
+   val streamingKMmodel = new StreamingKMeans() 
+     streamingKMmodel.setDecayFactor(1.0) 
+     streamingKMmodel.setK(k) 
+     streamingKMmodel.setInitialCenters(batchKMModel.clusterCenters, weightVector) 
+     streamingKMmodel.trainOn(dataStream) 
+     
+     
+    def costlyAveDisToCentroidScore1(data: RDD[Vector], newModel:KMeansModel): Double = 
+    data.map(datum => distToCentroid(datum, newModel)).mean()
+    
+    //For each rdd, get the distance score and anomalies
+    labeledDataStream.foreachRDD { (rdd, time) =>
+      val dataRDD = rdd.map {case(lable, data) => data }
+      val normalizedDataRDD = dataRDD.map(normalizeFunction)
+      val latest = streamingKMmodel.latestModel()
+      val distanceScore = costlyAveDisToCentroidScore1(normalizedDataRDD, latest)
+      //get the anomalous data
+      val anomalies = dataRDD.filter { datum => anomalyDetector(datum)}
+    }
    
    //Save the clustering evaluations for d3 in json file
    
    ssc.start()
-   ssc.awaitTermination()
+   ssc.awaitTermination()  
    sc.stop()
 
    }//END OF MAIN
@@ -338,6 +274,10 @@ object IntrusionKMeans{
        Vectors.dense(normalizedArray)
    } 
  }//end of buildNormalizationFunction
+ 
+ def costlyAveDisToCentroidScore(data: RDD[Vector], newModel:KMeansModel): Double = {
+    data.map(datum => distToCentroid(datum, newModel)).mean()
+}
  
   def searchBestKWithNormalizedDataUsingDistance(rawData: RDD[Vector]): Unit = {
     //normalizedData: RDD[org.apache.spark.mllib.linalg.Vector] 
@@ -501,7 +441,7 @@ object IntrusionKMeans{
   //normalizeFunction: given vector, produce normalize entry for vector
   //this will return a function.  Given vector, this function will tell
   //whether the given data is anomalous or not.
-  def buildAnomalyDetector(
+  def buildAnomalyDetector1(
      data: RDD[Vector],
      normalizeFunction: (Vector => Vector)): (Vector => Boolean) = {
     val normalizedData = data.map(normalizeFunction)
@@ -513,12 +453,36 @@ object IntrusionKMeans{
     kmeans.setEpsilon(1.0e-6)
     val model = kmeans.run(normalizedData)
     normalizedData.unpersist()
-    
 
     //RDD[Double]
     //each element is distance to the closest centroid for all data
     val distances = normalizedData.
         map(datum => distToCentroid(datum, model))
+    //pick 100th farthest data point from among known data
+    //top function from RDD
+    //def top(num: Int)(implicit ord: Ordering[T]): Array[T]
+    //Returns the top k (largest) elements from this RDD as defined by the specified 
+     //implicit Ordering[T]. This does the opposite of takeOrdered.
+    val threshold = distances.top(100).last
+    (datum: Vector) => distToCentroid(normalizeFunction(datum), model) > threshold
+  }//end of buildAnomalyDetector function
+  
+  /////////////////////////////////////////////////////////
+///clustering in Action. Detect Anomalous samples////
+////////////////////////////////////////////////////////
+// Detect anomalies
+//input of RDD[Vector], which only contains data without label
+//normalizeFunction: given vector, produce normalize entry for vector
+//this will return a function.  Given vector, this function will tell
+//whether the given data is anomalous or not.
+def buildAnomalyDetector(
+     model: KMeansModel,
+     data: RDD[Vector],
+     normalizeFunction: (Vector => Vector)): (Vector => Boolean) = {
+    val normalizedData = data.map(normalizeFunction)
+     //RDD[Double]
+    //each element is distance to the closest centroid for all data
+    val distances = normalizedData.map(datum => distToCentroid(datum, model))
     //pick 100th farthest data point from among known data
     //top function from RDD
     //def top(num: Int)(implicit ord: Ordering[T]): Array[T]
@@ -540,7 +504,7 @@ object IntrusionKMeans{
     val originalAndData = rawData.map(line => (line, parseFunction(line)._2))
     val data = originalAndData.values
     val normalizeFunction = buildNormalizationFunction(data)
-    val anomalyDetector = buildAnomalyDetector(data, normalizeFunction)
+    val anomalyDetector = buildAnomalyDetector1(data, normalizeFunction)
     
 
 
@@ -608,55 +572,3 @@ object IntrusionKMeans{
   }
   
 }//end of object
-
-
-//Producer
-object producer{
-        def main(args: Array[String]){
-                AdjustLogLevel.setStreamingLogLevels()
-                val conf = new SparkConf().setMaster("local").setAppName("producer")
-                val sc = new SparkContext(conf)
-                //Create random number generator
-                val random = new Random()
-                //Maximum number of events per second
-                val MaxEvents = 100
-                //create object of data
-                val lines = sc.textFile("/home/lance/BigData/FirstProject/kddcup.data_10_percent")
-                //Split the data
-                val Array(batchData, streamingData) = lines.randomSplit(Array(0.95, 0.05))
-                //val Array(batchData, streamingData) = lines.randomSplit(Array(0.6, 0.4))
-                def generateNetworkEvents(n:Int) = {
-                  (1 to n).map{i =>
-                   val line = streamingData.takeSample(true, 1, random.nextLong)
-                  (line)
-                  }
-                }  
-                //create a network producer
-                val listener = new ServerSocket(9999)
-                println("Listening on port: 9999")
-                while(true) {
-                        //create a new network socket
-                        val socket = listener.accept()
-                        new Thread() {
-                                override def run = {
-                                        println("Client connected from: "+ socket.getInetAddress)
-                                        val out = new PrintWriter(socket.getOutputStream(), true)
-                                        while(true) {
-                                                Thread.sleep(1000)
-                                                val num = random.nextInt(MaxEvents)
-                                                val networkEvents = generateNetworkEvents(num)
-                                                networkEvents.foreach { event =>
-                                                        //productIterator convert tuple into iterator
-                                                        //out.write(event.productIterator.mkString(","))
-                                                        out.write(event.mkString(","))
-                                                        out.write("\n")
-                                                }
-                                                out.flush()
-                                                println(s"Created $num events...")
-                                        }//end while
-                                        socket.close()
-                                }
-                        }.start()
-                }//end while
-        }
-}
